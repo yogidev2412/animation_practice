@@ -1,4 +1,4 @@
-import 'package:animation/animation_three/explicit.dart';
+import 'package:animation/custom_painting/paint_one.dart';
 
 import 'package:flutter/material.dart';
 
@@ -11,9 +11,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: ExplicitAnimations(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: PaintOne());
   }
 }
