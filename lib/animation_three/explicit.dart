@@ -13,6 +13,9 @@ class _ExplicitAnimationsState extends State<ExplicitAnimations>
   late Animation<double> animation;
   late Animation<double> fadeAnimation;
   late Animation<double> scaleAnimation;
+  late Animation<Offset> slideAnimation;
+  late Animation<double> rotationAnimation;
+  late Animation<double> anitClockRotationAnimation;
 
   @override
   void initState() {
@@ -36,6 +39,21 @@ class _ExplicitAnimationsState extends State<ExplicitAnimations>
     scaleAnimation = Tween<double>(
       begin: 0.0,
       end: 1.0,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    slideAnimation = Tween<Offset>(
+      begin: Offset(-2.5, 0),
+      end: Offset(0, 0),
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    rotationAnimation = Tween<double>(
+      begin: 0,
+      end: 1,
+    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
+
+    anitClockRotationAnimation = Tween<double>(
+      begin: 0,
+      end: -1,
     ).animate(CurvedAnimation(parent: controller, curve: Curves.easeInOut));
 
     controller.forward();
@@ -92,148 +110,87 @@ class _ExplicitAnimationsState extends State<ExplicitAnimations>
                   child: Container(
                     width: 100,
                     height: 100,
-                    color: Colors.amber,
-                    child: Text(
-                      "Fade Transition Animations",
-                      style: TextStyle(
-                        fontSize: 24,
-                        fontWeight: FontWeight.bold,
+                    padding: EdgeInsets.all(10),
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: Center(
+                      child: Text(
+                        "Fade Transition Animations",
+                        style: TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.bold,
+                        ),
                       ),
                     ),
                   ),
                 ),
 
+                SizedBox(height: 20),
                 ScaleTransition(
                   scale: scaleAnimation,
                   child: Container(
-                    width: 200,
+                    width: 100,
                     height: 100,
-                    color: Colors.amber,
+                    decoration: BoxDecoration(
+                      color: Colors.amber,
+                      borderRadius: BorderRadius.circular(100),
+                    ),
                   ),
+                ),
+
+                SizedBox(height: 20),
+
+                SlideTransition(
+                  position: slideAnimation,
+                  child: AnimatedOpacity(
+                    duration: Duration(seconds: 1),
+                    opacity: fadeAnimation.value,
+                    child: Container(
+                      width: 100,
+                      height: 100,
+                      decoration: BoxDecoration(
+                        color: Colors.red,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                    ),
+                  ),
+                ),
+
+                SizedBox(height: 20),
+
+                Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    RotationTransition(
+                      turns: rotationAnimation,
+                      child: Container(
+                        width: 130,
+                        height: 130,
+                        decoration: BoxDecoration(
+                          color: Colors.green,
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                    ),
+                    RotationTransition(
+                      turns: anitClockRotationAnimation,
+                      child: Container(
+                        width: 100,
+                        height: 100,
+                        decoration: BoxDecoration(
+                          color: Colors.amber,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
           );
         },
-      ),
-    );
-  }
-}
-
-class GpayStylePopup extends StatefulWidget {
-  const GpayStylePopup({super.key});
-
-  @override
-  State<GpayStylePopup> createState() => _GpayStylePopupState();
-}
-
-class _GpayStylePopupState extends State<GpayStylePopup>
-    with SingleTickerProviderStateMixin {
-  late AnimationController controller;
-
-  late Animation<Offset> slideAnimation;
-  late Animation<double> fadeAnimation;
-  late Animation<double> scaleAnimation;
-
-  bool isOpen = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    controller = AnimationController(
-      vsync: this,
-      duration: Duration(milliseconds: 500),
-    );
-
-    slideAnimation = Tween<Offset>(
-      begin: Offset(0, 1), // bottom
-      end: Offset(0, 0),
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOut));
-
-    fadeAnimation = Tween<double>(begin: 0, end: 1).animate(controller);
-
-    scaleAnimation = Tween<double>(
-      begin: 0.9,
-      end: 1,
-    ).animate(CurvedAnimation(parent: controller, curve: Curves.easeOutBack));
-  }
-
-  @override
-  void dispose() {
-    controller.dispose();
-    super.dispose();
-  }
-
-  void togglePopup() {
-    if (isOpen) {
-      controller.reverse();
-    } else {
-      controller.forward();
-    }
-    isOpen = !isOpen;
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: Text("GPay Style Animation")),
-      body: Stack(
-        children: [
-          /// Main Screen
-          Center(
-            child: ElevatedButton(
-              onPressed: togglePopup,
-              child: Text("Show Popup"),
-            ),
-          ),
-
-          /// 🔥 Background Fade
-          FadeTransition(
-            opacity: fadeAnimation,
-            child: GestureDetector(
-              onTap: togglePopup,
-              child: Container(color: Colors.black54),
-            ),
-          ),
-
-          /// 🔥 Popup
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: SlideTransition(
-              position: slideAnimation,
-              child: ScaleTransition(
-                scale: scaleAnimation,
-                child: Container(
-                  height: 250,
-                  padding: EdgeInsets.all(20),
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.vertical(
-                      top: Radius.circular(20),
-                    ),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        "Payment Successful 💸",
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(height: 20),
-                      ElevatedButton(
-                        onPressed: togglePopup,
-                        child: Text("Close"),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
