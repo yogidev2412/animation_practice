@@ -1,4 +1,4 @@
-import 'package:animation/animation_two/screens/moving_object_animation_state.dart';
+import 'package:animation/animation_three/implicity.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -10,9 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      home: MovingObjectAnimationState(),
-    );
+    return MaterialApp(debugShowCheckedModeBanner: false, home: Implicity());
   }
 }
