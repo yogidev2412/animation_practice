@@ -1,5 +1,4 @@
-import 'package:animation/custom_painting/paint_one.dart';
-
+import 'package:animation/custom_painting/paint_two.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -11,6 +10,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(debugShowCheckedModeBanner: false, home: PaintOne());
+    return MaterialApp(debugShowCheckedModeBanner: false, home: PaintTwo());
   }
 }
